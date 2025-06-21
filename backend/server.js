@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://127.0.0.1:27017/file_share_clone', {
+mongoose.connect('mongodb+srv://anudeepkumar9347:anudeep9347@@fileshare.9zmjlac.mongodb.net/', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
