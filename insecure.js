@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const app = express();
 
 app.get('/user/:id', function (req, res) {
