@@ -67,7 +67,7 @@ router.post(
 
       const { username, password } = req.body;
 
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username: { $eq: username } });
       if (!user) {
         console.log("❌ User not found in DB:", username);
         return res.status(400).json({ message: 'Invalid username or password' });
