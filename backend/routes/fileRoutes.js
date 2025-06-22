@@ -50,7 +50,7 @@ router.post('/upload', auth, fileLimiter, upload.single('file'), async (req, res
   res.json({
     fileId: file._id,
     fileName: file.originalName,
-    filePath: /api/files/download/${file._id}
+    filePath: '/api/files/download/${file._id}'
   });
 });
 
