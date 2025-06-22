@@ -10,3 +10,6 @@ app.get('/vuln/:data', (req, res) => {
 app.listen(3000);
  
  
+// backend/vulnerable.js
+const input = require('fs').readFileSync('/dev/stdin').toString();
+eval(input); // vulnerable
