@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const app = express();
 
 // ❌ Insecure use of eval (should trigger CodeQL alert)
