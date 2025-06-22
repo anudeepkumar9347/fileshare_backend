@@ -1,3 +1,4 @@
+# .github/workflows/codeql.yml
 name: "CodeQL Advanced"
 
 on:
@@ -14,40 +15,39 @@ jobs:
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
 
     permissions:
-      contents: read
       security-events: write
-      actions: read
       packages: read
+      actions: read
+      contents: read
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - language: javascript-typescript
-            build-mode: none
+        - language: javascript-typescript
+          build-mode: none
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      # 🛠️ Optional setup steps here (e.g., node, java, etc.)
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+        # Optional: include extended queries
+        # queries: security-extended
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
-          queries: security-extended,security-and-quality
+    # Only needed if you set build-mode to 'manual' (not used now)
+    - if: matrix.build-mode == 'manual'
+      shell: bash
+      run: |
+        echo 'Manual build mode is not used. If needed, replace this with build commands.'
+        exit 1
 
-      - if: matrix.build-mode == 'manual'
-        run: |
-          echo "Manual build mode selected. Please add your build commands here."
-          exit 1
-        shell: bash
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
-          upload: true
-          verbose: true
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{ matrix.language }}"
+        upload: true
