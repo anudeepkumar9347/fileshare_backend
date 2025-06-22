@@ -1,0 +1,4 @@
+name: fileshare-config
+disable-default-queries: false
+queries:
+  - uses: security-extended
