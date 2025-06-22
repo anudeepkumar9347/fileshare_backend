@@ -18,8 +18,10 @@ router.post(
   async (req, res) => {
     try {
       console.log("🔐 Register request body:", req.body);
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log("⚠️ Validation failed:", errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
 
@@ -27,15 +29,17 @@ router.post(
 
       const existingUser = await User.findOne({ username });
       if (existingUser) {
+        console.log("⚠️ Username already exists in DB:", username);
         return res.status(400).json({ message: 'Username already exists' });
       }
 
-      // No hashing here! Let the model handle it
       const user = new User({ username, password });
+      console.log("👉 Saving new user to DB...");
       await user.save();
 
       console.log("✅ User registered:", user.username);
       res.json({ message: 'User registered successfully' });
+      console.log("🟢 Registration complete and response sent");
     } catch (err) {
       console.error("❌ Register error:", err.stack || err.message || err);
       res.status(500).json({ message: 'Server error' });
@@ -54,8 +58,10 @@ router.post(
   async (req, res) => {
     try {
       console.log("🔑 Login request body:", req.body);
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log("⚠️ Validation failed:", errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
 
@@ -63,6 +69,7 @@ router.post(
 
       const user = await User.findOne({ username });
       if (!user) {
+        console.log("❌ User not found in DB:", username);
         return res.status(400).json({ message: 'Invalid username or password' });
       }
 
@@ -70,10 +77,12 @@ router.post(
       console.log(`✅ Password match: ${isMatch}`);
 
       if (!isMatch) {
+        console.log("❌ Password did not match for user:", username);
         return res.status(400).json({ message: 'Invalid username or password' });
       }
 
       const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
+      console.log("🟢 Login successful, token sent");
       res.json({ token });
     } catch (err) {
       console.error("❌ Login error:", err.stack || err.message || err);
