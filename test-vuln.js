@@ -11,3 +11,4 @@ app.get('/danger', (req, res) => {
 app.listen(3002, () => {
   console.log('Vulnerable test app running on http://localhost:3002');
 }); 
+
