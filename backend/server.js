@@ -15,6 +15,7 @@ const { dismissAlert } = require('./bot/dismissAlert');
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1); // ✅ Needed for express-rate-limit
 app.use(cors());
 
 // 👁️ Use raw body for GitHub signature verification
