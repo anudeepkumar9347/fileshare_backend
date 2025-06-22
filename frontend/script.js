@@ -1,6 +1,7 @@
 // frontend/script.js
 let token = '';
-const API_BASE = 'http://localhost:5001';
+const API_BASE = 'https://fileshare-o1fc.onrender.com'; 
+
 
 async function register() {
     console.log("Register button clicked");
