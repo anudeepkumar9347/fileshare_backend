@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const mongoose = require('mongoose');
+const { fileLimiter } = require('../middleware/rateLimiter'); // ← Added
 
 const fileSchema = new mongoose.Schema({
     originalName: String,
@@ -27,8 +28,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Upload route
-router.post('/upload', upload.single('file'), async (req, res) => {
+// Upload route (with rate limiting)
+router.post('/upload', fileLimiter, upload.single('file'), async (req, res) => {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
     const file = new File({
         originalName: req.file.originalname,
@@ -38,14 +39,14 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     res.json({ fileName: file.originalName, filePath: file.path });
 });
 
-// List files
-router.get('/', async (req, res) => {
+// List files (with rate limiting)
+router.get('/', fileLimiter, async (req, res) => {
     const files = await File.find();
     res.json(files);
 });
 
-// Delete file
-router.delete('/:id', async (req, res) => {
+// Delete file (with rate limiting)
+router.delete('/:id', fileLimiter, async (req, res) => {
     const file = await File.findById(req.params.id);
     if (!file) return res.status(404).json({ message: 'File not found' });
 
