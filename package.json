@@ -6,6 +6,10 @@
     "scripts": {
         "start": "node backend/server.js"
     },
+    "engines": {
+  "node": "18.x"
+}
+,
     "dependencies": {
         "@octokit/app": "^16.0.1",
         "@octokit/auth-app": "^8.0.1",
